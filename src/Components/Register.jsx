@@ -35,7 +35,7 @@ const Register = () => {
             createUser(email, password)
                 .then(() => {
 
-                    toast.success('Log in Successfully!', {
+                    toast.success('Register Successfully!', {
 
                         style: {
                             borderRadius: '10px',
@@ -129,7 +129,7 @@ const Register = () => {
                                     </div>
                                     <p className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</p>
                                 </div>
-                                <button type="submit" className="w-full focus:ring-4 focus:outline-none bg-blue-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center btn btn-error">Log in</button>
+                                <button type="submit" className="w-full focus:ring-4 focus:outline-none bg-blue-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center btn btn-error">Register</button>
                                 <p className="text-sm font-light">
                                     Have an account? <Link to='/logIn' className="font-medium text-blue-gray-600 btn ">Sign up</Link>
                                 </p>
