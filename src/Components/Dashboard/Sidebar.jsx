@@ -14,6 +14,7 @@ import { Card, Chip, Collapse, IconButton, List, ListItem, ListItemPrefix, ListI
 import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../AuthProvider/AuthProvider";
+import Swal from "sweetalert2";
 
 
 
@@ -21,7 +22,41 @@ const Sidebar = () => {
     const [openNav, setOpenNav] = useState(false);
     const {LogOut}=useContext(AuthContext)
     const handleLogout=()=>{
-        LogOut()
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-success",
+              cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+          });
+          swalWithBootstrapButtons.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Log Out!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+                LogOut()
+              swalWithBootstrapButtons.fire({
+                title: "Log Out",
+                text: "Log Out Successfully ",
+                icon: "success"
+              });
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: "Cancelled",
+                text: "Your imaginary file is safe :)",
+                icon: "error"
+              });
+            }
+          });
+       
     }
 
     return (

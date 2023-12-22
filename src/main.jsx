@@ -23,6 +23,7 @@ import Profile from './Components/Dashboard/Profile';
 import DashboardHome from './Components/Dashboard/DashboardHome';
 import About from './Components/Home/About';
 import Contact from './Components/Home/Contact';
+import { Toaster } from 'react-hot-toast';
 
 // Create a client
 const queryClient = new QueryClient()
@@ -79,6 +80,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+        />
       </QueryClientProvider>
 
     </AuthProvider>

@@ -1,21 +1,71 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider/AuthProvider";
+import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
 
 
 const LogIn = () => {
-    const { sigIn } = useContext(AuthContext)
+    const { sigIn, signInWithGoogle } = useContext(AuthContext)
+    const navigate = useNavigate()
+
+    const location = useLocation()
+
     const handleSubmit = (e) => {
         e.preventDefault()
         const password = e.target.password.value
         const email = e.target.email.value
 
-        sigIn(email,password)
-        .then(res=>{
-            console.log(res);
+        sigIn(email, password)
+            .then(res => {
+                if (res.user.uid) {
+                    toast.success('Log in Successfully!', {
+
+                        style: {
+                            borderRadius: '10px',
+                            background: '#333',
+                            color: '#fff',
+                        },
+                    })
+                    navigate(location?.state ? location.state : '/')
+                }
+            })
+            .catch(err => {
+                toast.error(err.message,
+                    {
+                        style: {
+                            borderRadius: '10px',
+                            background: '#FF0',
+                            color: '#333',
+                        },
+                    });
+            })
+    }
+
+    const handleGoogle = () => {
+        signInWithGoogle()
+        .then(res => {
+            if (res.user.uid) {
+                toast.success('Log in Successfully!', {
+
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#fff',
+                    },
+                })
+                navigate(location?.state ? location.state : '/')
+            }
         })
-        .catch(err=>{
-            console.log(err);
+        .catch(err => {
+            toast.error(err.message,
+                {
+                    style: {
+                        borderRadius: '10px',
+                        background: '#FF0',
+                        color: '#333',
+                    },
+                });
         })
     }
 
@@ -55,10 +105,13 @@ const LogIn = () => {
                                     <p className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</p>
                                 </div>
                                 <button type="submit" className="w-full focus:ring-4 focus:outline-none bg-blue-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center btn btn-error">Log in</button>
+
                                 <p className="text-sm font-light">
                                     Don’t have an account yet? <Link to='/signIn' className="font-medium text-blue-gray-600 btn ">Sign up</Link>
                                 </p>
                             </form>
+                            <p className="text-center">or</p>
+                            <button onClick={handleGoogle} className="w-full focus:ring-4 focus:outline-none bg-blue-gray-400 font-medium rounded-lg text-2xl px-5 py-2.5 text-center btn btn-error"><FcGoogle /></button>
                         </div>
                     </div>
                 </div>

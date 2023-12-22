@@ -5,10 +5,11 @@ import { AuthContext } from "./AuthProvider/AuthProvider";
 import auth from "./firebase.js/firebase";
 import { updateProfile } from "firebase/auth";
 import useAxiosPublic from "./Hooks/useAxiosPublic";
+import toast from "react-hot-toast";
 
 
 const Register = () => {
-    const axiosPublic =useAxiosPublic()
+    const axiosPublic = useAxiosPublic()
 
     const { createUser } = useContext(AuthContext)
     const navigate = useNavigate()
@@ -20,7 +21,7 @@ const Register = () => {
         const email = e.target.email.value
         const profession = e.target.profession.value
         const image = e.target.photoUrl.files[0]
-       
+
         const formData = new FormData()
         formData.append('image', image)
         const res = await axios.post('https://api.imgbb.com/1/upload?key=8c18d2802c17409cea414bbb6076ba41', formData, {
@@ -28,12 +29,21 @@ const Register = () => {
         })
         const photo = res.data.data.display_url
 
-        const userData ={name,email,profession,photo}
+        const userData = { name, email, profession, photo }
 
         if (/^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/.test(password)) {
             createUser(email, password)
-                .then((res) => {
-                    console.log(res.data);
+                .then(() => {
+
+                    toast.success('Log in Successfully!', {
+
+                        style: {
+                            borderRadius: '10px',
+                            background: '#333',
+                            color: '#fff',
+                        },
+                    })
+
                     const user = auth.currentUser
                     if (user) {
                         updateProfile(user, {
@@ -41,18 +51,33 @@ const Register = () => {
                             photoURL: photo,
                         })
                         axiosPublic.post('/users', { userData })
-                        .then(res => {
-                            console.log(res.data)   
-                        })
+
+                            
                     }
                     navigate('/')
                 })
-                .catch(err=>{
-                    console.log(err);
+                .catch(err => {
+                    toast.error(err.message,
+                        {
+                            style: {
+                                borderRadius: '10px',
+                                background: '#FF0',
+                                color: '#333',
+                            },
+                        });
                 })
         }
-        else{
-            console.log('fdf');
+        else {
+           
+                toast.error('Password should contain 1 upper case,1 special character and at least 6 character',
+                    {
+                        style: {
+                            borderRadius: '10px',
+                            background: '#FF0',
+                            color: '#333',
+                        },
+                    });
+           
         }
 
     }
@@ -74,7 +99,7 @@ const Register = () => {
                             <form className="space-y-4 md:space-y-6 " onSubmit={handleSubmit} >
                                 <div>
                                     <label className="block mb-2 text-sm font-medium  ">Your Name</label>
-                                    <input type="name"  name="name" id="name" className="w-full p-2.5" placeholder="name" required />
+                                    <input type="name" name="name" id="name" className="w-full p-2.5" placeholder="name" required />
                                 </div>
                                 <div>
                                     <label className="block mb-2 text-sm font-medium ">Your Photo</label>
@@ -88,10 +113,10 @@ const Register = () => {
                                     <label className="block mb-2 text-sm font-medium  ">Your Email</label>
                                     <input type="email" name="email" id="email" className="w-full p-2.5" placeholder="name@company.com" required />
                                 </div>
-                               
+
                                 <div>
                                     <label className="block mb-2 text-sm font-medium  ">Password</label>
-                                    <input type="password"  name="password" id="password" placeholder="••••••••" className="w-full p-2.5" required />
+                                    <input type="password" name="password" id="password" placeholder="••••••••" className="w-full p-2.5" required />
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-start">

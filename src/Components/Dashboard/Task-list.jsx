@@ -9,6 +9,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { useContext } from "react";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const Task = () => {
     const axiosPublic = useAxiosPublic()
@@ -28,13 +29,20 @@ const Task = () => {
     })
 
     const task = tasks.filter(data => data.Uid === user?.uid)
-
-
     refetch()
+
+
     const onSubmit = (data) => {
         axiosPublic.post('/tasks', { data, info, Uid })
-            .then(res => {
-                console.log(res.data)
+            .then(()=> {
+                toast.success('Task Added Successfully!',{
+
+                    style: {
+                      borderRadius: '10px',
+                      background: '#333',
+                      color: '#fff',
+                    },
+                  })
                 refetch()
             })
         refetch()
@@ -63,8 +71,15 @@ const Task = () => {
             const data = { tittle, description, deadline, priority }
             console.log(data);
             axiosPublic.put(`/upTasks/${id}`, { data })
-                .then(res => {
-                    console.log(res.data);
+                .then(() => {
+                    toast.success('Updated Task Added Successfully!',{
+
+                        style: {
+                          borderRadius: '10px',
+                          background: '#333',
+                          color: '#fff',
+                        },
+                      })
                     refetch()
                 }
 
