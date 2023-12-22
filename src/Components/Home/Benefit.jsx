@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -7,16 +8,17 @@ import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from '../Hooks/useAxiosPublic';
+
 const Benefit = () => {
     const axiosPublic = useAxiosPublic()
-    const { data: users = [], refetch } = useQuery({
+    const { data: users = [] } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await axiosPublic.get(`/users`)
             return res.data
         }
     })
-    console.log(users);
+   
     return (
         <div>
             <h2 className='text-4xl font-bold text-center pb-10'>Our Users</h2>
